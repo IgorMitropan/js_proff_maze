@@ -1,0 +1,101 @@
+h3 {
+    margin: 0;
+    padding: 5px;
+}
+select {
+    height: 30px;
+    margin-left: 10px;
+}
+div {
+    margin-left: 4px;
+}
+.container {
+    padding: 10px;
+    margin: 10px 4px;
+    border-radius: 8px;
+    border: 1px solid grey;
+    display: inline-block;
+    vertical-align: middle;
+}
+.stages {
+    width: 300px;
+    float: left;
+}
+.inlineDiv {
+    display: inline-block;
+}
+
+table {
+    margin: 10px;
+    border-collapse: collapse;
+}
+td {
+    height: 25px;
+    width: 25px;
+    border: 1px solid black;
+    text-align: center;
+}
+td.wall {
+    background-color: darkgray;
+}
+td.start {
+    background-color: yellow;
+}
+td.finish {
+    background-color: indianred;
+}
+td.path {
+    background-color: skyblue;
+}
+.controlBtn {
+    height: 34px;
+    margin: 4px;
+    border-radius: 8px;
+    background-color: #337ab7;
+    border-color: rgb(36, 85, 128);
+    font-size: large;
+    color: white;
+}
+.notification {
+    height: 34px;
+    position: absolute;
+    z-index: 1000;
+    padding: 9px 5px 3px;
+    margin: 0;
+    border-radius: 8px;
+    border: 1px solid ;
+    color: white;
+    font: normal 20px Georgia;
+    background: skyblue;
+    text-align: center;
+    vertical-align: middle;
+}
+.breadcrumb {
+    padding: 10px;
+    margin: 0 10px;
+    font: normal 16px Georgia;
+}
+.breadcrumb > li {
+    margin: 4px;
+
+    color: #777;
+}
+.breadcrumb > .active {
+    color: black;
+    border-radius: 8px;
+    border: 1px solid lightgrey;
+    background-color: lightgrey;
+}
+.breadcrumb > .blinked {
+    border-color: red;
+
+}
+
+p {
+    margin: 0;
+    padding: 2px;
+    font: normal 14px Georgia;
+}
+.js-hidden {
+    display: none;
+}

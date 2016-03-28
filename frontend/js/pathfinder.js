@@ -144,6 +144,7 @@ export default class Pathfinder {
     _go() {
         Pathfinder._hideEl(this._nextBtn);
         Pathfinder._hideEl(this._goBtn);
+        this._hideDetailsAboutButtons();
 
         this._timer = setInterval(this._next.bind(this), 500);
     }
@@ -163,7 +164,8 @@ export default class Pathfinder {
         Pathfinder._hideEl(this._nextBtn);
         Pathfinder._hideEl(this._goBtn);
 
-        this._changeActiveStage(event.detail.message);
+        this._changeActiveStage();
+        this._showAlgorithmResult(event.detail.message);
     }
 //------------------ subordinate private method---------------
     _clear() {
@@ -175,9 +177,11 @@ export default class Pathfinder {
             this._maze.clear();
             this._maze = null;
         }
+        this._hideAlgorithmResult();
+        this._showDetailsAboutButtons();
     }
 
-//------------different non-logical private methods changing styles---------------------------
+//------------different non-logical private methods changing styles and HTML---------------------------
     _blinkCurrentStage() {
         let activeListItem = this._breadcrumbs.querySelector('.active');
 
@@ -190,16 +194,28 @@ export default class Pathfinder {
 
     _changeActiveStage(message) {
         this._breadcrumbs.querySelector('.active').classList.remove('active');
-
         this._breadcrumbs.children[this.stage].classList.add('active');
+    }
 
+    _showAlgorithmResult(message) {
         if (this.stage === Pathfinder.STAGES.FINISH && message) {
             this._breadcrumbs.lastElementChild.lastElementChild.innerHTML = message;
         }
-
     }
 
+    _hideAlgorithmResult() {
+        this._breadcrumbs.lastElementChild.lastElementChild.innerHTML = '';
+    }
 
+    _showDetailsAboutButtons() {
+        this._breadcrumbs.children[4].lastElementChild.innerHTML =
+            'Press \'Next\' to see next step, or press \'Go\' to see the whole algorithm';
+        this._breadcrumbs.children[5].lastElementChild.innerHTML =
+            'Press \'Next\' to see next step, or press \'Go\' to see the whole algorithm';
+    }
 
-
+    _hideDetailsAboutButtons() {
+        this._breadcrumbs.children[4].lastElementChild.innerHTML = '';
+        this._breadcrumbs.children[5].lastElementChild.innerHTML = '';
+    }
 }

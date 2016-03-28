@@ -8,6 +8,7 @@ export default class Maze {
     constructor(options) {
         this._el = options.element;
         this._size = options.size;
+        this._neighborhoodCondition = options.withDiagonalNeighbors ? Maze.NEIGHBORHOOD.ORTHO_DIAGONAL : Maze.NEIGHBORHOOD.ORTHOGONAL;
 
         this._renderMaze();
 
@@ -17,11 +18,19 @@ export default class Maze {
         this._startPoint = undefined;
         this._endPoint = undefined;
         this._step = undefined;
-
-        this._choosing = undefined;
-        this._currentCell = undefined;
     }
+    static get NEIGHBORHOOD() {
+        return {
+            ORTHOGONAL: function(cellX, cellY, neighbourX, neighbourY) {// according to 'von Neumann neighborhood' conception
+                return ( (neighbourY === cellY && neighbourX !== cellX)
+                || (neighbourY !== cellY && neighbourX === cellX) );
+            },
 
+            ORTHO_DIAGONAL: function(cellX, cellY, neighbourX, neighbourY) { //according to 'Moore neighborhood' conception
+             return ( !(neighbourY === cellY && neighbourX === cellX) )
+            }
+        }
+    }
 //----------- get methods--------------
     get size() {
         return this._size;
@@ -38,7 +47,6 @@ export default class Maze {
     get step() {
         return this._step;
     }
-
 
 //------------- public methods---------------
     clear() {
@@ -128,8 +136,8 @@ export default class Maze {
 
         for (let i = Math.max(y-1, 0); i <= Math.min(y+1, this.size-1); i++) {
             for (let j = Math.max(x-1, 0); j <= Math.min(x+1, this.size-1); j++) {
-                if ( (i === y && j !== x) || (i !== y && j === x) ) { // only orthogonal neighbours is taken
-                    neighbours.push(this._map.rows[i].cells[j]);      // according to 'von Neumann neighborhood' conception
+                if ( this._neighborhoodCondition(x,y,j,i) ) {
+                    neighbours.push(this._map.rows[i].cells[j]);
                 }
             }
         }

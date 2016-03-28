@@ -1,7 +1,7 @@
 'use strict';
 import Maze from './maze1.js';
 
-const patterns = {
+const patternsForMazes = {
     5: [[0,0,0,0,0],['W',0,'W','W',0],[0,0,0,0,0],[0,'W','W','W','W'],[0,0,0,0,0]],
     10:[[0,0,0,0,0,0,0,0,0,0],['W','W',0,'W','W','W','W','W','W',0],[0,0,0,0,'W',0,0,0,0,0],[0,0,0,0,'W',0,'W','W','W','W'],[0,0,0,0,'W',0,'W',0,0,0],
         [0,0,0,0,'W',0,'W',0,0,0],[0,0,0,0,'W',0,'W',0,0,0],[0,0,0,0,'W',0,'W',0,'W','W'],['W','W','W','W','W',0,'W',0,'W',0],[0,0,0,0,0,0,0,0,0,0]],
@@ -21,8 +21,13 @@ export default class Pathfinder {
         this._sizeSelector = this._el.querySelector('[data-selector="sizeSelector"]');
         this._sizeSelector.addEventListener('change', this._createMaze.bind(this));
 
+        this._neighbourhoodSelector = this._el.querySelector('[data-selector="neighbourhoodSelector"]');
+
         this._nextBtn = this._el.querySelector('[data-selector="nextBtn"]');
         this._nextBtn.addEventListener('click', this._next.bind(this));
+
+        this._goBtn = this._el.querySelector('[data-selector="goBtn"]');
+        this._goBtn.addEventListener('click', this._go.bind(this));
 
         this._mazePlace = this._el.querySelector('[data-component="mazePlace"]');
         this._mazePlace.addEventListener('backTraceStart', this._backTraceStart.bind(this));
@@ -61,26 +66,31 @@ export default class Pathfinder {
 
 //------------- event handlers----------------
     _createMaze() {
+        let size = parseInt(this._sizeSelector.options[this._sizeSelector.selectedIndex].value);
+        let withDiagonals = this._neighbourhoodSelector.querySelector('input[type="checkbox"]').checked;
+
         this._clear();
 
-        let size = parseInt(this._sizeSelector.options[this._sizeSelector.selectedIndex].value);
-
         if (size) {
+            Pathfinder._hideEl(this._neighbourhoodSelector);
             Pathfinder._showEl(this._nextBtn);
             Pathfinder._showEl(this._mazePlace);
 
             this._maze = new Maze({
                 element: this._mazePlace,
-                size: size
+                size: size,
+                withDiagonalNeighbors: withDiagonals
             });
-            this._maze.fillWithPattern(patterns[size]);
+            this._maze.fillWithPattern(patternsForMazes[size]);
 
             this._stage = Pathfinder.STAGES.CHANGING_MAZE;
 
 
         } else {
             Pathfinder._hideEl(this._nextBtn);
+            Pathfinder._hideEl(this._goBtn);
             Pathfinder._hideEl(this._mazePlace);
+            Pathfinder._showEl(this._neighbourhoodSelector);
 
             this._stage = Pathfinder.STAGES.CHOOSING_SIZE;
         }
@@ -112,6 +122,8 @@ export default class Pathfinder {
                 if (this._maze.endPoint) {
                     this._stage = Pathfinder.STAGES.WAVE_EXPANSION;
 
+                    Pathfinder._showEl(this._goBtn);
+
                     this._maze.nextStep();
                 } else {
                     this._blinkCurrentStage();
@@ -129,6 +141,13 @@ export default class Pathfinder {
         this._changeActiveStage();
     }
 
+    _go() {
+        Pathfinder._hideEl(this._nextBtn);
+        Pathfinder._hideEl(this._goBtn);
+
+        this._timer = setInterval(this._next.bind(this), 500);
+    }
+
     _backTraceStart() {
         this._stage = Pathfinder.STAGES.BACKTRACE;
         this._changeActiveStage();
@@ -137,13 +156,20 @@ export default class Pathfinder {
     _finish(event) {
         this._stage = Pathfinder.STAGES.FINISH;
 
+        if (this._timer) {
+            clearInterval(this._timer);
+        }
+
+        Pathfinder._hideEl(this._nextBtn);
+        Pathfinder._hideEl(this._goBtn);
+
         this._changeActiveStage(event.detail.message);
     }
 //------------------ subordinate private method---------------
     _clear() {
-        /*if(this._gameOverNotification) {
-            this._gameOverNotification.hide();
-        }*/
+        if (this._timer) {
+            clearInterval(this._timer);
+        }
 
         if(this._maze) {
             this._maze.clear();

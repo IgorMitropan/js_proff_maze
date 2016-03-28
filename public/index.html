@@ -16,19 +16,19 @@
                 <ul class="breadcrumb" data-selector="breadcrumbs">
                     <li class="active">Choose a maze size</li>
                     <li>
-                        Change the maze <br><p>by clicking on its cells, if you'd like, and press Next.</p>
+                        Change the maze <br><p>by clicking on its cells, if you'd like, and press 'Next'</p>
                     </li>
                     <li>
-                        Choose start point <br><p>by clicking on appropriate cell and press Next</p>
+                        Choose start point <br><p>by clicking on appropriate cell and press 'Next'</p>
                     </li>
                     <li>
-                        Choose end point<br><p>by clicking on appropriate cell and press Next</p>
+                        Choose end point<br><p>by clicking on appropriate cell and press 'Next'</p>
                     </li>
                     <li>
-                        Wave expansion<br><p>Click Next to see next Step</p>
+                        Wave expansion<br><p>Press 'Next' to see next step, or press 'Go' to see the whole algorithm</p>
                     </li>
                     <li>
-                        Backtrace<br><p>Click Next to see next Step</p>
+                        Backtrace<br><p>Press 'Next' to see next step, or press 'Go' to see the whole algorithm</p>
                     </li>
                     <li>
                         Algorithm is finished<br><p></p>
@@ -37,6 +37,10 @@
             </div>
             <div class="inlineDiv">
                 <div>
+                    <div data-selector="neighbourhoodSelector">
+                        <input type="checkbox" id="container-neighbourhoodSelector">
+                        <label for="container-neighbourhoodSelector">Check it for using diagonal steps</label>
+                    </div>
                     <select data-selector="sizeSelector">
                         <option value="0" selected>Choose a maze size:</option>
                         <option value="5">5 x 5</option>
@@ -44,6 +48,7 @@
                         <option value="20">20 x 20</option>
                     </select>
                     <button data-selector="nextBtn" class="controlBtn js-hidden">Next</button>
+                    <button data-selector="goBtn" class="controlBtn js-hidden">Go!</button>
                 </div>
 
                 <div data-component="mazePlace" class="js-hidden">

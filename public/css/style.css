@@ -7,7 +7,7 @@ select {
     margin-left: 10px;
 }
 div {
-    margin-left: 4px;
+    margin: 4px;
 }
 .container {
     padding: 10px;
@@ -88,14 +88,13 @@ td.path {
 }
 .breadcrumb > .blinked {
     border-color: red;
-
 }
-
 p {
     margin: 0;
     padding: 2px;
     font: normal 14px Georgia;
 }
+
 .js-hidden {
     display: none;
 }

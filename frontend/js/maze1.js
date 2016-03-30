@@ -1,5 +1,7 @@
 'use strict';
+
 import * as polyfills from'./polyfills';
+
 polyfills.installMatches(); //cross browser polyfill for 'matches' (does not supported by IE)
 polyfills.installClosest(); //cross browser polyfill for 'closest' (does not supported by IE)
 polyfills.installCustomEvent(); //cross browser polyfill for 'custom events' (does not supported by IE)
@@ -27,7 +29,7 @@ export default class Maze {
             },
 
             ORTHO_DIAGONAL: function(cellX, cellY, neighbourX, neighbourY) { //according to 'Moore neighborhood' conception
-             return ( !(neighbourY === cellY && neighbourX === cellX) )
+             return (neighbourY !== cellY || neighbourX !== cellX)
             }
         }
     }
@@ -59,11 +61,11 @@ export default class Maze {
             return;
         }
 
-        for(let i = 0; i<this.size; i++) {
-            for (let j = 0; j<this.size; j++) {
+        for (let i = 0; i < this.size; i++) {
+            for (let j = 0; j < this.size; j++) {
                 let td = this._map.rows[i].cells[j];
 
-                if ( pattern[i][j] === 'W') {
+                if (pattern[i][j] === 'W') {
                     td.dataset.info = 'W';
                     Maze._toggleWall(td);
                 }
@@ -134,8 +136,8 @@ export default class Maze {
     cellNeighbours(y,x) {
         let neighbours = [];
 
-        for (let i = Math.max(y-1, 0); i <= Math.min(y+1, this.size-1); i++) {
-            for (let j = Math.max(x-1, 0); j <= Math.min(x+1, this.size-1); j++) {
+        for (let i = Math.max(y - 1, 0); i <= Math.min(y + 1, this.size - 1); i++) {
+            for (let j = Math.max(x - 1, 0); j <= Math.min(x + 1, this.size - 1); j++) {
                 if ( this._neighborhoodCondition(x,y,j,i) ) {
                     neighbours.push(this._map.rows[i].cells[j]);
                 }
@@ -199,9 +201,9 @@ export default class Maze {
     _renderMaze() {
         let mazeHtml = '<table data-selector="map">';
 
-        for(let i = 0; i<this.size; i++) {
+        for (let i = 0; i < this.size; i++) {
             mazeHtml +='<tr>\n';
-            for (let j = 0; j<this.size; j++) {
+            for (let j = 0; j < this.size; j++) {
                 mazeHtml+='<td></td>\n';
             }
             mazeHtml +='</tr>';
@@ -221,9 +223,8 @@ export default class Maze {
 
                 if (parseInt(td.innerHTML) === (step - 1)) {
 
-                    let neighbours = this.cellNeighbours(i,j);
-
-                    neighbours.filter(cell => !cell.innerHTML && !cell.dataset.info)
+                    this.cellNeighbours(i,j)
+                        .filter(cell => !cell.innerHTML && !cell.dataset.info)
                         .forEach(cell => {
                             cell.innerHTML = step;
                             wasMarked = true;
@@ -249,15 +250,15 @@ export default class Maze {
 
         let neighbours = this.cellNeighbours(this._currentCell.parentNode.rowIndex, this._currentCell.cellIndex);
 
-        this._currentCell = this._nextCellWithMinSteps(neighbours,this._currentCell);
+        this._currentCell = this._nextCellWithMinSteps(this._currentCell, neighbours);
 
         if (this._currentCell === this.startPoint) {
             return false;
         } else {
             Maze._markPath(this._currentCell);
+
             return true;
         }
-
     }
 
     _finish(message) {
@@ -268,12 +269,12 @@ export default class Maze {
         this._el.dispatchEvent(event);
     }
 
-    _nextCellWithMinSteps(cells, currentCell) {
-        return cells.reduce( (current, cell)=> {
-            if ( parseInt(cell.innerHTML) < parseInt(current.innerHTML) ) {
-                current = cell;
+    _nextCellWithMinSteps(currentCell, neighborCells) {
+        return neighborCells.reduce( (cellWithMinSteps, cell)=> {
+            if ( parseInt(cell.innerHTML) < parseInt(cellWithMinSteps.innerHTML) ) {
+                cellWithMinSteps = cell;
             }
-            return current;
+            return cellWithMinSteps;
 
         },currentCell);
     }

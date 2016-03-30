@@ -165,6 +165,7 @@ export default class Pathfinder {
         Pathfinder._hideEl(this._goBtn);
 
         this._changeActiveStage();
+
         this._showAlgorithmResult(event.detail.message);
     }
 //------------------ subordinate private method---------------
@@ -192,7 +193,7 @@ export default class Pathfinder {
         }, 500);
     }
 
-    _changeActiveStage(message) {
+    _changeActiveStage() {
         this._breadcrumbs.querySelector('.active').classList.remove('active');
         this._breadcrumbs.children[this.stage].classList.add('active');
     }
@@ -209,9 +210,9 @@ export default class Pathfinder {
 
     _showDetailsAboutButtons() {
         this._breadcrumbs.children[4].lastElementChild.innerHTML =
-            'Press \'Next\' to see next step, or press \'Go\' to see the whole algorithm';
+            'Press \'Next\' to see next step, <br>or press \'Go\' to see the whole algorithm';
         this._breadcrumbs.children[5].lastElementChild.innerHTML =
-            'Press \'Next\' to see next step, or press \'Go\' to see the whole algorithm';
+            'Press \'Next\' to see next step, <br>or press \'Go\' to see the whole algorithm';
     }
 
     _hideDetailsAboutButtons() {

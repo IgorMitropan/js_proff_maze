@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+    <head lang="en">
+        <meta charset="UTF-8">
+        <title>Maze pathfinder</title>
+
+        <link href="css/style.css" rel="stylesheet">
+
+        <script src="./mazePathfinder.js" defer></script>
+    </head>
+    <body>
+        <h2>This is a demo of maze routing method, based on the 'Lee algorithm'</h2>
+        <div id="container" class="container">
+            <div data-selector="stages" class="stages">
+                <h3>Stages of the algorithm:</h3>
+                <ul class="breadcrumb" data-selector="breadcrumbs">
+                    <li class="active">Choose a maze size</li>
+                    <li>
+                        Change the maze <br><p>by clicking on its cells, if you'd like, <br>and press 'Next'</p>
+                    </li>
+                    <li>
+                        Choose start point <br><p>by clicking on appropriate cell <br>and press 'Next'</p>
+                    </li>
+                    <li>
+                        Choose end point<br><p>by clicking on appropriate cell <br>and press 'Next'</p>
+                    </li>
+                    <li>
+                        Wave expansion<br><p>Press 'Next' to see next step, <br>or press 'Go' to see the whole algorithm</p>
+                    </li>
+                    <li>
+                        Backtrace<br><p>Press 'Next' to see next step, <br>or press 'Go' to see the whole algorithm</p>
+                    </li>
+                    <li>
+                        Algorithm is finished<br><p></p>
+                    </li>
+                </ul>
+            </div>
+            <div class="inlineDiv">
+                <div>
+                    <div data-selector="neighbourhoodSelector">
+                        <input type="checkbox" id="container-neighbourhoodSelector">
+                        <label for="container-neighbourhoodSelector">Check it for using diagonal steps</label>
+                    </div>
+                    <select data-selector="sizeSelector">
+                        <option value="0" selected>Choose a maze size:</option>
+                        <option value="5">5 x 5</option>
+                        <option value="10">10 x 10</option>
+                        <option value="20">20 x 20</option>
+                    </select>
+                    <button data-selector="nextBtn" class="controlBtn js-hidden">Next</button>
+                    <button data-selector="goBtn" class="controlBtn js-hidden">Go!</button>
+                </div>
+
+                <div data-component="mazePlace" class="js-hidden">
+                </div>
+            </div>
+
+        </div>
+    </body>
+</html>
